@@ -109,8 +109,26 @@ platforms:
   - name: ubuntu-14.04
     driver:
       image_search:
-        owner-id: "099720109477"
-        name: ubuntu/images/*/ubuntu-*-14.04*
+        filters:
+          owner-id: "099720109477"
+          name: ubuntu/images/*/ubuntu-*-14.04*
+```
+
+More specific filters can also be used:
+
+```yaml
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      image_search:
+
+        filters: # describe-images "filters" API
+          name: "debian-10-amd64-*"
+          tag:Name: "foobar"
+
+        owners: # describe-images "owners" API
+          - self
+          - "136693071363"
 ```
 
 In the event that there are multiple matches (as sometimes happens), we sort to
@@ -266,8 +284,9 @@ The default is unset, or `nil`.
 An example of usage:
 ```yaml
 subnet_filter:
-  tag:   'Name'
-  value: 'example-subnet-name'
+  filters:
+    tag:Name: 'example-subnet-name'
+    mapPublicIpOnLaunch: 'true'
 ```
 
 #### `tags`
