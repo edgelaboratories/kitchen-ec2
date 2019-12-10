@@ -47,12 +47,12 @@ module Kitchen
           if config[:subnet_id].nil? && config[:subnet_filter]
             config[:subnet_id] = ::Aws::EC2::Client
               .new(region: config[:region]).describe_subnets(
-                filters: [
+                filters: config[:subnet_filter].fetch(:filters, {}).map do |key, value|
                   {
-                    name: "tag:#{config[:subnet_filter][:tag]}",
-                    values: [config[:subnet_filter][:value]],
-                  },
-                ]
+                    name: key,
+                    values: [value],
+                  }
+                end
               )[0][0].subnet_id
 
             if config[:subnet_id].nil?
